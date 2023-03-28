@@ -2,7 +2,7 @@ import './Login.css'
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Checkbox, Button, IconButton } from '@mui/material'
 import { Close } from '@mui/icons-material'
-import { auth, signInWithEmailAndPassword, signInWithGoogle, registerWithEmailAndPassword } from "../../firebase";
+import { auth, logInWithEmailAndPassword, signInWithGoogle, registerWithEmailAndPassword } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -36,42 +36,42 @@ export default function Login() {
 
   return (
     <>
-      {!creatingNewAccount ? (
-        <Box sx={loginModalStyle}>
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Sign in to your account
-          </Typography>
-          <IconButton aria-label="close">
-            <Close/>
-          </IconButton>
+      <Box sx={loginModalStyle}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+        {!creatingNewAccount? "Sign In" : "Create an Account"}
+        </Typography>
+        <IconButton aria-label="close">
+          <Close/>
+        </IconButton>
+        </div>
+        {!creatingNewAccount? (
+        <Box component="form" autoComplete='on' sx={{'& .MuiTextField-root': { mt: 1, mb: 2}, '& .MuiButton-root': {mb: 1}, mt: 2}}>
+          <div>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <span>Email Address</span>
+              <TextField id="outlined-required" label="Email address" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <span>Password</span>
+              <TextField id="outlined-password-input" label="Password" type="password" value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}/>                
+            </div>
+            <Button sx={{width: '100%', backgroundColor: 'blue', color: "white"}} onClick={() => logInWithEmailAndPassword(email, password)}>Log In</Button>
+            <Button sx={{width: '100%', backgroundColor: 'grey', color: "white"}} onClick={() => signInWithGoogle()}>Log In with Google</Button>
           </div>
-          <Box component="form" autoComplete='on' sx={{'& .MuiTextField-root': { mt: 1, mb: 2}, '& .MuiButton-root': {mb: 1}, mt: 2}}>
-              <div>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <span>Email Address</span>
-                  <TextField id="outlined-required" label="Email address" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <span>Password</span>
-                  <TextField id="outlined-password-input" label="Password" type="password" value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}/>                
-                </div>
-                <Button sx={{width: '100%', backgroundColor: 'blue', color: "white"}}>Log In</Button>
-                <Button sx={{width: '100%', backgroundColor: 'grey', color: "white"}}>Continue with Google</Button>
-              </div>
-          </Box>
           Don't have an account yet?
-          <Button onClick={() => setCreatingNewAccount(true)}>Create an account</Button>
+        <Button onClick={() => setCreatingNewAccount(true)}>Create an account</Button>
         </Box>
-      ): (
-        <Register/>
-      )
-      }
+        ): (
+            <Register creatingNewAccount={creatingNewAccount} setCreatingNewAccount={setCreatingNewAccount}/>
+          )
+        }
+      </Box>
     </>
   )
 }
 
-const Register = () => {
+const Register = ({creatingNewAccount, setCreatingNewAccount}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -87,61 +87,36 @@ const Register = () => {
   }, [user, loading]);
   return (
     <>
-      <Box sx={loginModalStyle}>
-      <Typography id="modal-modal-title" variant="h6" component="h2">
-        Create an account
-      </Typography>
-
-      <div style={{display: 'flex', flexDirection: 'column'}}>
-        <span>Full Name</span>
-        <TextField id="outlined-name" label="Full Name" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-      </div>
-
-      <div style={{display: 'flex', flexDirection: 'column'}}>
-        <span>Email Address</span>
-        <TextField id="outlined-email" label="Email address" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-      </div>
-
-      <div style={{display: 'flex', flexDirection: 'column'}}>
-        <span>Password</span>
-        <TextField id="outlined-password-input" label="Password" type="password" value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}/>                
-      </div>
-
-      <div className="register__container">
-        <input
-          type="text"
-          className="register__textBox"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Full Name"
-        />
-        <input
-          type="text"
-          className="register__textBox"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="E-mail Address"
-        />
-        <input
-          type="password"
-          className="register__textBox"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        <button className="register__btn" onClick={register}>
-          Register
-        </button>
-        <button
-          className="register__btn register__google"
-          onClick={signInWithGoogle}
-        >
-          Register with Google
-        </button>
-        <div>
-          Already have an account? 
-          <Button>Login</Button>
+      <Box component="form" autoComplete='on' sx={{'& .MuiTextField-root': { mt: 1, mb: 2}, '& .MuiButton-root': {mb: 1}, mt: 2}}>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <span>Full Name</span>
+          <TextField id="outlined-name" label="Full Name" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
         </div>
+
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <span>Email Address</span>
+          <TextField id="outlined-email" label="Email address" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        </div>
+
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <span>Password</span>
+          <TextField id="outlined-password-input" label="Password" type="password" value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)}/>                
+        </div>
+
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <Button className="register__btn" onClick={() => register()}>
+            Register
+          </Button>
+          <Button
+            className="register__btn register__google"
+            onClick={() => signInWithGoogle()}
+          >
+            Register with Google
+          </Button>
+          <div>
+            Already have an account? 
+            <Button onClick={() => setCreatingNewAccount(false)}>Login</Button>
+          </div>
         </div>
       </Box>
     </>

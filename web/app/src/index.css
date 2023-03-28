@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Kumbh+Sans:light,regular,bold,800,italic&subset=latin,latin-ext');
 
+:root {
+  --southwest-dark: #111b40;
+  --southwest-dark-blue: #1A2C80;
+  --southwest-blue: #304CB2;
+  --southwest-grey: #CCCCCC;
+  --southwest-red: #E51D23;
+  --southwest-yellow: #FFBF27;
+}
+
 body {
   margin: 0;
   font-family: 'Kumbh Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,3 +22,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+

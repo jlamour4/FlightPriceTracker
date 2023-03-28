@@ -3,7 +3,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {  AppBar, Box, Toolbar, IconButton, Typography, 
           Menu, SvgIcon, Container, Avatar, 
           Button, Tooltip, MenuItem, Modal } from '@mui/material';
-import Login from '../Login';
+import Login from '../login';
+import FlightAvatar from '../flight-avatar';
+import { auth, logout } from '../../firebase';
 
 const pages = ['How It Works', 'About', 'Changelog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -12,6 +14,7 @@ function FlightAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [loginOpen, setLoginOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -26,6 +29,27 @@ function FlightAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  }
+
+  const handleSettingSelection = (event) => {
+    
+    switch (event.target.innerHTML) {
+      case 'Profile':
+        console.log("wayyerr")
+        break;
+      case 'Dashboard':
+        console.log("WAYYY");
+        break;
+      case 'Logout':
+        logout();
+        console.log("POOO");
+        break;
+      default: 
+        break;
+    }
+
+    console.log(event.target.innerHTML);
+    setAnchorElUser(null);
   };
 
   const openLoginModal = () => {
@@ -35,9 +59,15 @@ function FlightAppBar() {
   const handleLoginOpen = () => setLoginOpen(true)
   const handleLoginClose = () => setLoginOpen(false);
 
+  React.useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      user ? setIsLoggedIn(true) : setIsLoggedIn(false);
+    })
+  })
+
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{backgroundColor: 'var(--southwest-blue)'}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* INSERT ICON  */}
@@ -64,7 +94,7 @@ function FlightAppBar() {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleOpenNavMenu}
+                onClick={() => handleOpenNavMenu()}
                 color="inherit"
               >
                 <MenuIcon />
@@ -82,13 +112,13 @@ function FlightAppBar() {
                   horizontal: 'left',
                 }}
                 open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+                onClose={() => handleCloseNavMenu}
                 sx={{
                   display: { xs: 'block', md: 'none' },
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem key={page} onClick={() => handleCloseNavMenu()}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -117,7 +147,7 @@ function FlightAppBar() {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => handleCloseNavMenu()}
                   sx={{ my: 2, color: 'white', display: 'block'}}
                 >
                   {page}
@@ -126,16 +156,20 @@ function FlightAppBar() {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Button
-                sx={{my:2, color:'white', display: 'inline'}}
-                onClick={handleLoginOpen}>Sign In</Button>
+              { isLoggedIn ? (
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <FlightAvatar/>
                 </IconButton>
               </Tooltip>
+              ) : (
+              <Button
+                sx={{my:2, color:'white', display: 'inline'}}
+                onClick={handleLoginOpen}>Sign In
+              </Button>
+              )}
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: '45px'}}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -151,7 +185,7 @@ function FlightAppBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={handleSettingSelection}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
@@ -164,8 +198,8 @@ function FlightAppBar() {
       <Modal
         open={loginOpen}
         onClose={handleLoginClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        ariaLabeledBy="modal-modal-title"
+        ariaDescribedBy="modal-modal-description">
         <Login/>
       </Modal>
     </>
