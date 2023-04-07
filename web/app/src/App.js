@@ -1,36 +1,55 @@
+import { useSelector } from 'react-redux';
+
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+
+// routing
+import Routes from 'routes';
+
+// defaultTheme
+import themes from 'themes';
+
+// project imports
+import NavigationScroll from 'layout/NavigationScroll';
 import { useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import './App.css';
-import { auth } from './firebase';
-import Home from './pages/Home';
-import ThemeProvider from './theme'
-import ScrollToTop from './components/scroll-to-top'
-import { StyledChart } from './components/chart';
-import Router from './routes';
 
-function App() {
+import { auth } from 'utils/firebase/firebase';
+import { AuthProvider } from 'Auth';
 
-  useEffect(() => {
-		auth.onAuthStateChanged((user) => {
-      if (user) {
-        // console.log(user);
-				// setName(user.displayName);
-				// setImageSrc(user.photoURL);
-      } else {
-        console.log("USER IS SIGNED OUT");
-      }
-    })
-  })
+// ==============================|| APP ||============================== //
 
-  return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <ScrollToTop/>
-        <StyledChart/>
-        <Router/>
-      </ThemeProvider>
-    </BrowserRouter>
-  );
-}
+const App = () => {
+    const customization = useSelector((state) => state.customization);
+
+    // const authListener = () => {
+    //     auth.onAuthStateChanged((user) => {
+    //         if (user) {
+    //             console.log(user);
+    //             // setName(user.displayName);
+    //             // setImageSrc(user.photoURL);
+    //         } else {
+    //             console.log('USER IS SIGNED OUT');
+    //         }
+    //     });
+    // };
+    // useEffect(() => {
+    //     authListener();
+    // }, []);
+
+    // const user = useSelector((state) => state.user);
+
+    return (
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={themes(customization)}>
+                <CssBaseline />
+                <NavigationScroll>
+                    <AuthProvider>
+                        <Routes />
+                    </AuthProvider>
+                </NavigationScroll>
+            </ThemeProvider>
+        </StyledEngineProvider>
+    );
+};
 
 export default App;
