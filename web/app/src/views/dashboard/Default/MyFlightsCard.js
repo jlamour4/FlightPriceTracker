@@ -3,7 +3,9 @@ import { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Button, CardActions, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, Button, CardActions, CardContent, Divider, Grid, Menu, MenuItem, Typography, Modal, Box } from '@mui/material';
+import AnimateButton from 'ui-component/extended/AnimateButton';
+import AddFlightsModal from './AddFlightsModal';
 
 // project imports
 import BajajAreaChartCard from './BajajAreaChartCard';
@@ -16,20 +18,26 @@ import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import AddIcon from '@mui/icons-material/Add';
 
-// ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
+// ==============================|| DASHBOARD DEFAULT - MyFlightsCard CARD ||============================== //
 
-const PopularCard = ({ isLoading }) => {
+const MyFlightsCard = ({ isLoading }) => {
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [addFlightModalOpen, setAddFlightModalOpen] = useState(false);
+
+    const handleClose = () => {
+        setAddFlightModalOpen(false);
+    };
+
+    const handleAddFlight = () => {
+        setAddFlightModalOpen(true);
+    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
     };
 
     return (
@@ -43,39 +51,20 @@ const PopularCard = ({ isLoading }) => {
                             <Grid item xs={12}>
                                 <Grid container alignContent="center" justifyContent="space-between">
                                     <Grid item>
-                                        <Typography variant="h4">Popular Stocks</Typography>
+                                        <Typography variant="h4">My Flights</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <MoreHorizOutlinedIcon
-                                            fontSize="small"
-                                            sx={{
-                                                color: theme.palette.primary[200],
-                                                cursor: 'pointer'
-                                            }}
-                                            aria-controls="menu-popular-card"
-                                            aria-haspopup="true"
-                                            onClick={handleClick}
-                                        />
-                                        <Menu
-                                            id="menu-popular-card"
-                                            anchorEl={anchorEl}
-                                            keepMounted
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleClose}
-                                            variant="selectedMenu"
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'right'
-                                            }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right'
-                                            }}
-                                        >
-                                            <MenuItem onClick={handleClose}> Today</MenuItem>
-                                            <MenuItem onClick={handleClose}> This Month</MenuItem>
-                                            <MenuItem onClick={handleClose}> This Year </MenuItem>
-                                        </Menu>
+                                        <AnimateButton>
+                                            <Button
+                                                onClick={handleAddFlight}
+                                                variant="contained"
+                                                color="primary"
+                                                sx={{ boxShadow: 'none' }}
+                                            >
+                                                <AddIcon fontSize="medium" color="inherit" />
+                                                Add Flight
+                                            </Button>
+                                        </AnimateButton>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -298,12 +287,14 @@ const PopularCard = ({ isLoading }) => {
                     </CardActions>
                 </MainCard>
             )}
+
+            <AddFlightsModal modalOpen={addFlightModalOpen} handleClose={handleClose}></AddFlightsModal>
         </>
     );
 };
 
-PopularCard.propTypes = {
+MyFlightsCard.propTypes = {
     isLoading: PropTypes.bool
 };
 
-export default PopularCard;
+export default MyFlightsCard;

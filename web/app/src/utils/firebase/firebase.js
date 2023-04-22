@@ -9,22 +9,13 @@ import {
     signOut
 } from 'firebase/auth';
 import { getFirestore, query, getDocs, collection, where, addDoc } from 'firebase/firestore';
-// import { firebaseConfig } from './firebaseConfig';
+import { firebaseConfig } from './firebaseConfig';
+import { getDatabase } from 'firebase/database';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Initialize Firebase
-const firebaseConfig = {
-    apiKey: 'AIzaSyDdFazGN6qAVa_hU0gcrbVx7zfgKfjIX-M',
-    authDomain: 'flightpricetracker-203ce.firebaseapp.com',
-    databaseURL: 'https://flightpricetracker-203ce-default-rtdb.firebaseio.com',
-    projectId: 'flightpricetracker-203ce',
-    storageBucket: 'flightpricetracker-203ce.appspot.com',
-    messagingSenderId: '10342481314',
-    appId: '1:10342481314:web:7407d16865b5d28bfb06fb'
-};
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -90,3 +81,4 @@ const logout = () => {
 };
 
 export { auth, db, signInWithGoogle, logInWithEmailAndPassword, registerWithEmailAndPassword, sendPasswordReset, logout };
+export const database = getDatabase(app);

@@ -1,30 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    firstname: '',
-    lastname: '',
+    uid: '',
+    name: '',
     email: '',
-    phone: ''
+    phone: '',
+    profileImage: '',
+    type: 'external'
 };
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        update: (state, action) => {
-            state.firstname = action.payload.firstname;
-            state.lastname = action.payload.lastname;
+        updateUser: (state, action) => {
+            state.name = action.payload.name;
             state.email = action.payload.email;
             state.phone = action.payload.phone;
+            state.profileImage = action.payload.profileImage;
         },
-        reset: (state) => {
-            state.firstname = initialState.firstname;
-            state.lastname = initialState.lastname;
+        updateType: (state, action) => {
+            state.type = action.payload;
+        },
+        resetUser: (state) => {
+            state.name = initialState.name;
             state.email = initialState.email;
             state.phone = initialState.phone;
+            state.profileImage = initialState.profileImage;
+            state.type = initialState.type;
         }
     }
 });
 
-export const { update, reset } = userSlice.actions;
+export const { updateUser, updateType, resetUser } = userSlice.actions;
 export default userSlice.reducer;

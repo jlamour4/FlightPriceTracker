@@ -35,7 +35,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
@@ -45,6 +44,8 @@ import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 const ProfileSection = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
+    const user = useSelector((state) => state.user);
+    console.log(user);
     const navigate = useNavigate();
 
     const [sdm, setSdm] = useState(true);
@@ -58,6 +59,7 @@ const ProfileSection = () => {
     const anchorRef = useRef(null);
     const handleLogout = async () => {
         logout();
+        navigate('/');
     };
 
     const handleClose = (event) => {
@@ -112,7 +114,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={User1}
+                        src={user.profileImage}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -122,7 +124,7 @@ const ProfileSection = () => {
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         color="inherit"
-                    />
+                    ></Avatar>
                 }
                 label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
                 variant="outlined"
@@ -160,10 +162,12 @@ const ProfileSection = () => {
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography variant="h4">Good Morning,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    Johne Doe
+                                                    {user.name}
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2">Project Admin</Typography>
+                                            <Typography variant="subtitle2">
+                                                {user.type == 'external' ? 'Limited Access' : 'Full Access'}
+                                            </Typography>
                                         </Stack>
                                         <OutlinedInput
                                             sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}

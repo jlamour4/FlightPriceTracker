@@ -8,8 +8,8 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
+const TrackingFlights = Loadable(lazy(() => import('views/tracking/Flights')));
+const TrackingDates = Loadable(lazy(() => import('views/tracking/Dates')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
@@ -28,54 +28,26 @@ const MainRoutes = {
             element: <DashboardDefault />
         },
         {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
-                }
-            ]
+            path: 'tracking-flights',
+            element: <TrackingFlights />
         },
         {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-color',
-                    element: <UtilsColor />
-                }
-            ]
-        },
-        {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
-            ]
-        },
-        {
-            path: 'icons',
-            children: [
-                {
-                    path: 'tabler-icons',
-                    element: <UtilsTablerIcons />
-                }
-            ]
-        },
-        {
-            path: 'icons',
-            children: [
-                {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
-            ]
-        },
-        {
-            path: 'sample-page',
-            element: <SamplePage />
+            path: 'tracking-dates',
+            element: <TrackingDates />
         }
+        // {
+        //     path: 'icons',
+        //     children: [
+        //         {
+        //             path: 'material-icons',
+        //             element: <UtilsMaterialIcons />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'sample-page',
+        //     element: <SamplePage />
+        // }
     ]
 };
 

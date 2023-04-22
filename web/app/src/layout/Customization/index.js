@@ -69,9 +69,6 @@ const Customization = () => {
             break;
     }
 
-    console.log('$$$$$$$$$$$$$$');
-    console.log(customization);
-
     // state - font family
     const [fontFamily, setFontFamily] = useState(initialFont);
     useEffect(() => {

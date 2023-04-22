@@ -15,12 +15,16 @@ import { useEffect } from 'react';
 
 import { auth } from 'utils/firebase/firebase';
 import { AuthProvider } from 'Auth';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import UserProfile from 'features/user/userProfile';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 // ==============================|| APP ||============================== //
 
 const App = () => {
     const customization = useSelector((state) => state.customization);
-
+    const queryClient = new QueryClient();
     // const authListener = () => {
     //     auth.onAuthStateChanged((user) => {
     //         if (user) {
@@ -39,16 +43,18 @@ const App = () => {
     // const user = useSelector((state) => state.user);
 
     return (
-        <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={themes(customization)}>
-                <CssBaseline />
-                <NavigationScroll>
-                    <AuthProvider>
-                        <Routes />
-                    </AuthProvider>
-                </NavigationScroll>
-            </ThemeProvider>
-        </StyledEngineProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={themes(customization)}>
+                    <CssBaseline />
+                    <NavigationScroll>
+                        <AuthProvider>
+                            <Routes />
+                        </AuthProvider>
+                    </NavigationScroll>
+                </ThemeProvider>
+            </StyledEngineProvider>
+        </LocalizationProvider>
     );
 };
 
